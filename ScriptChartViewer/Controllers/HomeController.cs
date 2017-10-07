@@ -5,27 +5,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScriptChartViewer.Models;
+using System.Net.Http;
 
-namespace ScriptChartViewer.Controllers
+namespace WebChartViewer.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        // /2gWy0MzimOLR0Qp47Qr
+        [HttpGet("{chartId}")]
+        public IActionResult Index(string chartId)
         {
-            return View();
-        }
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress =
+                    new Uri("http://88.99.187.144");
+                var resp = httpclient.GetAsync($"/api/linechart/{chartId}").GetAwaiter().GetResult();
+                resp.EnsureSuccessStatusCode();
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+                ViewData["DataRows"] = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
 
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
+            ViewData["TestData"] = chartId;
             return View();
         }
 
