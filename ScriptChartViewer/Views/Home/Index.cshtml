@@ -1,38 +1,14 @@
-﻿@{
+﻿@model ScriptChartViewer.Models.ChartIdModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h2>Application uses</h2>
-<h3>Chart ID: @ViewData["TestData"]</h3>
-<div>
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', { packages: ['corechart', 'line'] });
-        google.charts.setOnLoadCallback(drawBasic);
+<h2>Enter your chart id</h2>
 
-        function drawBasic() {
-
-            var data = new google.visualization.DataTable();
-            data.addColumn('number', 'X');
-            data.addColumn('number', 'Y');
-
-            data.addRows(@ViewData["DataRows"]);
-
-            var options = {
-                hAxis: {
-                    title: 'X'
-                },
-                vAxis: {
-                    title: 'Y'
-                }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-            chart.draw(data, options);
-        }
-    </script>
-</div>
-
-<div id="chart_div"></div>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    @Html.TextBoxFor(model => model.ChartId)
+    @Html.ValidationMessageFor(model => model.ChartId)
+    <button type="submit">Submit</button>
+}
